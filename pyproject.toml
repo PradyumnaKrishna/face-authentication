@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "Face-Auth"
+version = "0.1.0"
+description = ""
+authors = ["Pradyumna Krishna <51270439+PradyumnaKrishna@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.70.1"
+uvicorn = "^0.16.0"
+pylint = "^2.12.2"
+black = "^21.12b0"
+sqlmodel = "^0.0.5"
+mkinit = "^0.3.4"
+aiofiles = "^0.8.0"
+python-multipart = "^0.0.5"
+requests = "^2.26.0"
+python-jose = "^3.3.0"
+psycopg2-binary = "^2.9.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[tool.black]
+target-version = ['py38']
+
+[tool.pylint.'FORMAT']
+max-line-length = 120
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = '''
+    duplicate-code,
+    fixme,
+    invalid-name,
+    logging-fstring-interpolation,
+    missing-module-docstring, 
+    missing-class-docstring, 
+    missing-function-docstring, 
+    
+    no-value-for-parameter,
+    redefined-builtin,
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-branches,
+    too-many-function-args,
+    too-many-lines,
+    too-many-locals,
+    too-many-nested-blocks,
+    unnecessary-lambda
+    '''
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

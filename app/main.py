@@ -1,0 +1,74 @@
+from typing import Optional
+
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from starlette.middleware.cors import CORSMiddleware
+
+from app.api.v1.routes import get_routes
+from app.core import create_db_and_tables, get_settings, Settings
+
+
+def get_app(settings: Optional[Settings] = None) -> FastAPI:
+    if not settings:
+        settings = get_settings()
+
+    web_app = FastAPI(
+        title=settings.PROJECT_NAME,
+        version="0.1.0",
+    )
+
+    web_app.state.settings = settings
+
+    # Set all CORS enabled origins
+    if settings.BACKEND_CORS_ORIGINS:
+        web_app.add_middleware(
+            CORSMiddleware,
+            allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+
+    routes = get_routes()
+    web_app.include_router(routes, prefix=settings.API_V1_STR)
+
+    return web_app
+
+
+app = get_app()
+
+
+@app.on_event("startup")
+def on_startup() -> None:
+    create_db_and_tables()
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@app.on_event("shutdown")
+def on_shutdown() -> None:
+    pass
+
+
+if __name__ == "__main__":
+    # IMPORTANT: This should only be used to debug the application.
+    # For normal execution, run `make start`.
+    #
+    # To make this work, the PYTHONPATH must be set to the root directory, e.g.
+    # `PYTHONPATH=. poetry run python ./app/main.py`
+    # See the VSCode launch configuration for detail.
+    import uvicorn
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "-p",
+        "--port",
+        default=8000,
+        type=int,
+        help="The port to listen on",
+    )
+    args = parser.parse_args()
+
+    uvicorn.run(app, host="0.0.0.0", port=args.port)
