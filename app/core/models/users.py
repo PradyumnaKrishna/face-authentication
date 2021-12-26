@@ -6,6 +6,7 @@ from sqlmodel import Field, SQLModel, UniqueConstraint
 class UserBase(SQLModel):
     __table_args__ = (UniqueConstraint("username"),)
     username: str
+    secret: str
 
 
 class User(UserBase, table=True):

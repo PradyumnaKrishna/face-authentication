@@ -20,7 +20,7 @@ router = APIRouter()
 def authorize(
     request: Request,
     username: str = Form(...),
-    file: UploadFile = File(...),
+    image: UploadFile = File(...),
     session: Session = Depends(get_session),
 ):
     base_url = request.base_url
@@ -28,7 +28,7 @@ def authorize(
     if not user:
         raise PermissionDenied("Invalid username")
 
-    path = save_file(file)
+    path = save_file(image)
     url = f"{base_url}{path}"
 
     user = authenticate_user(user=user, file_url=url)

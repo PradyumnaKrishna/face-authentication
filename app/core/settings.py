@@ -1,13 +1,13 @@
 from functools import lru_cache
-from typing import List
+from typing import List, Union
 
-from pydantic import AnyHttpUrl, BaseSettings
+from pydantic import AnyHttpUrl, BaseSettings, validator
 from pydantic.fields import Field
 
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = Field(
+    BACKEND_CORS_ORIGINS: Union[str, List[AnyHttpUrl]] = Field(
         default=[
             "http://localhost",
             "http://localhost:8080",
@@ -30,6 +30,12 @@ class Settings(BaseSettings):
 
     class Config:
         case_sensitive = True
+
+    @validator("BACKEND_CORS_ORIGINS", pre=True)
+    def _assemble_cors_origins(cls, cors_origins):
+        if isinstance(cors_origins, str):
+            return [item.strip() for item in cors_origins.split(",")]
+        return cors_origins
 
 
 @lru_cache()
