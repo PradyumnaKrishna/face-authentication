@@ -32,6 +32,7 @@ class Settings(BaseSettings):
         case_sensitive = True
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
+    @classmethod
     def _assemble_cors_origins(cls, cors_origins):
         if isinstance(cors_origins, str):
             return [item.strip() for item in cors_origins.split(",")]
