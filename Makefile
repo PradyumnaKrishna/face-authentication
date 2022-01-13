@@ -28,8 +28,8 @@ auto-lint:
 	poetry run black .
 	make lint
 
-test-integration: no-windows
-	@echo ✅ INTEGRATION TESTS
+test: no-windows
+	@echo ✅ TESTS
 	poetry run pytest -s . -x
 
 build: no-windows
