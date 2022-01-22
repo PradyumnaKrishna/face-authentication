@@ -99,6 +99,7 @@ venv.bak/
 
 # VS Code
 *.code-workspace
+.vscode
 
 # Jetbrains
 .idea

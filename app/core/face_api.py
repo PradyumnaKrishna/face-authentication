@@ -1,8 +1,5 @@
-from typing import Optional
-
 import requests
 from fastapi import status
-from pydantic import AnyHttpUrl
 from requests import Response
 
 from .exceptions import BadRequest, InternalError
@@ -28,8 +25,8 @@ class FaceAPI:
             raise BadRequest(detail=response.json())
         raise InternalError(f"Face API failed with response {response.json()}")
 
-    def add_face(self, person_id: str, file_url: AnyHttpUrl) -> bool:
-        url: AnyHttpUrl = f"{self.endpoint}/face/v1.0/persongroups/{self.group}/persons/{person_id}/persistedFaces"
+    def add_face(self, person_id: str, file_url: str) -> bool:
+        url = f"{self.endpoint}/face/v1.0/persongroups/{self.group}/persons/{person_id}/persistedFaces"
 
         payload = {"url": file_url}
 
@@ -38,8 +35,8 @@ class FaceAPI:
         self._extract(response)
         return True
 
-    def create_person(self, name: str) -> Optional[str]:
-        url: AnyHttpUrl = f"{self.endpoint}/face/v1.0/persongroups/{self.group}/persons"
+    def create_person(self, name: str) -> str:
+        url = f"{self.endpoint}/face/v1.0/persongroups/{self.group}/persons"
 
         payload = {"name": name}
 
@@ -48,8 +45,8 @@ class FaceAPI:
         json_response = self._extract(response)
         return json_response["personId"]
 
-    def detect(self, file_url: AnyHttpUrl) -> Optional[str]:
-        url: AnyHttpUrl = f"{self.endpoint}/face/v1.0/detect?returnFaceId=true&recognitionModel=recognition_04"
+    def detect(self, file_url: str) -> str:
+        url = f"{self.endpoint}/face/v1.0/detect?returnFaceId=true&recognitionModel=recognition_04"
 
         payload = {"url": file_url}
 
@@ -61,7 +58,7 @@ class FaceAPI:
         raise BadRequest(detail="Face not found")
 
     def verify(self, person_id: str, face_id: str) -> bool:
-        url: AnyHttpUrl = f"{self.endpoint}/face/v1.0/verify"
+        url = f"{self.endpoint}/face/v1.0/verify"
 
         payload = {
             "faceId": face_id,

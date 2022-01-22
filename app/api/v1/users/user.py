@@ -70,6 +70,8 @@ def upload(
     path = save_file(image)
 
     url = f"{base_url}{path}"
-    face_api.add_face(current_user.person_id, url)
+    if current_user.person_id:
+        face_api.add_face(current_user.person_id, url)
+        return "success"
 
-    return "success"
+    return BadRequest(f"user `{current_user.username}` doesn't have a `person_id`")
