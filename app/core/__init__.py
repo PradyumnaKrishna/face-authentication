@@ -7,11 +7,11 @@ from app.core import exceptions
 from app.core import face_api
 from app.core import models
 from app.core import settings
+from app.core import token
 from app.core import utils
 
 from app.core.auth import (
     authenticate_user,
-    create_access_token,
     get_current_user,
 )
 from app.core.db import (
@@ -24,6 +24,10 @@ from app.core.face_api import (
 from app.core.settings import (
     Settings,
     get_settings,
+)
+from app.core.token import (
+    create_access_token,
+    verify_token,
 )
 
 __all__ = [
@@ -41,5 +45,7 @@ __all__ = [
     "get_settings",
     "models",
     "settings",
+    "token",
     "utils",
+    "verify_token",
 ]
