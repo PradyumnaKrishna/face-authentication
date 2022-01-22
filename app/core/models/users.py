@@ -11,7 +11,7 @@ class UserBase(SQLModel):
 
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    person_id: Optional[str]
+    person_id: Optional[str] = None
 
 
 class UserCreate(UserBase):
