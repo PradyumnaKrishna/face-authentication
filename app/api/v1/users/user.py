@@ -74,4 +74,4 @@ def upload(
         face_api.add_face(current_user.person_id, url)
         return "success"
 
-    raise BadRequest(f"user doesn't have a `person_id`")
+    raise BadRequest("user doesn't have a `person_id`")
